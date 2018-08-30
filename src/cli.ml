@@ -15,7 +15,7 @@ let handle_args arg =
   match arg with
   | _ ->
     begin
-      match !json_string () with
+      match json_string () with
       | "" -> json_string_value := arg
       | _ ->
         begin
@@ -25,7 +25,7 @@ let handle_args arg =
     end
 
 let check () = 
-  match !json_string () with
+  match json_string () with
   | "" -> 
     begin
       Printf.printf "Specify a JSON_STRING. %s\n%!" (help_hint ());
