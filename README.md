@@ -10,10 +10,11 @@ Clone the repo:
     git clone https://github.com/jtpaasch/jason.git
     cd jason
 
-Run `oasis setup` and build:
+Run `oasis setup`, then build it and install:
 
     oasis setup
     make
+    make install
 
 Try the executable:
 
@@ -23,11 +24,18 @@ Try the executable:
 
 ## Using the library
 
-```
-let () =
-  let raw_json = "{\"foo\":\"bar\"}" in
-  let j = Json.decode raw_json;
+For instance, load the library in `utop`:
 
-  Printf.printf "%s\n%!" (Json.encode j)
-```
+    #use "topfind";;
+    #require "jason_lib";;
+
+Decode a JSON string:
+
+  let raw_json = "{\"foo\":\"bar\"}";;
+  let j = Json.decode raw_json;;
+
+Encode it back into a string:
+
+  Json.encode j;;
+
 
