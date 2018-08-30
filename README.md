@@ -31,11 +31,11 @@ For instance, load the library in `utop`:
 
 Decode a JSON string:
 
-  let raw_json = "{\"foo\":\"bar\"}";;
-  let j = Json.decode raw_json;;
+    let raw_json = "{\"foo\":\"bar\"}";;
+    let j = Json.decode raw_json;;
 
 Encode it back into a string:
 
-  Json.encode j;;
+    Json.encode j;;
 
 
