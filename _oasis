@@ -1,0 +1,24 @@
+Name: jason
+Version: 0.1
+OCamlVersion: >= 4.05
+Synopsis: A simple JSON decoder/encoder.
+Authors: JT Paasch
+License: LGPL with OCaml linking exception
+OASISFormat: 0.4
+BuildTools: ocamlbuild
+Plugins: META (0.4), DevFiles (0.4)
+
+Library jason_lib
+  Path: lib/
+  Modules:
+    Token,
+    Lexer,
+    Json
+  FindlibName: jason_lib
+
+Executable jason
+  Path: src/
+  MainIs: main.ml
+  BuildDepends:
+    jason_lib
+  Install: true
