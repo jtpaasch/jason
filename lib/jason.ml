@@ -1,4 +1,11 @@
+(** Implements {!Json}. *)
+
+module Token = Jason_token
+module Lexer = Jason_lexer
+
 exception ParseError of string
+exception NotSuch of string
+exception NoSuchKey of string
 
 type t =
   | Json_end
@@ -129,3 +136,135 @@ let decode s =
   res
 
 let encode j = string_of j
+
+let eof t =
+  match t with
+  | Json_end -> Some "EOF"
+  | _ -> None
+
+let eof_exn t =
+  match eof t with
+  | Some s -> s
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not JSON EOF/end: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let null t =
+  match t with
+  | Json_null -> Some "null"
+  | _ -> None
+
+let null_exn t =
+  match null t with
+  | Some s -> s
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not null: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let bool_true t =
+  match t with
+  | Json_true -> Some true
+  | _ -> None
+
+let bool_true_exn t =
+  match bool_true t with
+  | Some b -> b
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not the boolean true: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let bool_false t =
+  match t with
+  | Json_false -> Some false
+  | _ -> None
+
+let bool_false_exn t =
+  match bool_false t with
+  | Some b -> b
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not the boolean false: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let num t =
+  match t with
+  | Json_number s -> Some s
+  | _ -> None
+
+let num_exn t =
+  match num t with
+  | Some s -> s
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not a number: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let str t =
+  match t with
+  | Json_string s -> Some s
+  | _ -> None
+
+let str_exn t =
+  match str t with
+  | Some s -> s
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not a string: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let arr t =
+  match t with
+  | Json_array a -> Some a
+  | _ -> None
+
+let arr_exn t =
+  match arr t with
+  | Some a -> a
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not an array: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let obj t =
+  match t with
+  | Json_object o -> Some o
+  | _ -> None
+
+let obj_exn t =
+  match obj t with
+  | Some o -> o
+  | None ->
+    begin
+      let msg = Printf.sprintf "Not an object: '%s'" (encode t) in
+      raise (NotSuch msg)
+    end
+
+let rec value o k =
+  match o with
+  | [] -> None
+  | (k', v) :: tl ->
+    begin
+      match k = k' with
+      | true -> Some v
+      | false -> value tl k
+    end
+
+let value_exn o k =
+  match value o k with
+  | Some v -> v
+  | None ->
+    begin
+      let msg = Printf.sprintf "Key '%s' not found." k in
+      raise (NoSuchKey msg)
+    end
+

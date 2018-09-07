@@ -11,9 +11,9 @@ Plugins: META (0.4), DevFiles (0.4)
 Library jason_lib
   Path: lib/
   Modules:
-    Token,
-    Lexer,
-    Json
+    Jason_token,
+    Jason_lexer,
+    Jason
   FindlibName: jason_lib
 
 Executable jason

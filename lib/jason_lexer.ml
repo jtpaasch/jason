@@ -1,5 +1,7 @@
 (** Implements {!Lexer}. *)
 
+module Token = Jason_token
+
 exception LexError of string
 
 let slice s n =
